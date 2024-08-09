@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>Inventory</title>
+  </head>
+  <body>
+    <%-include("./partials/header")%>
+    <main>
+      <h1>All Genres</h1>
+      <form action="#" method="POST" class="genre-form">
+        <label for="newGenre">Add New Genre</label>
+        <input type="text" id="newGenre" name="newGenre">
+        <button class="newGenre-btn" type="submit">Submit</button>
+      </form>
+      <div class="container">
+        <ul class="no-tab">
+            <% genres.forEach((row)=>{%>
+                <li class="card-item list-item"><form action="/delete-genre/<%=row.id%>" method="POST"><button type="submit" class="delete-btn">Delete</button></form><a href="#"><%= row.genre%></a></li>
+                <%});%>
+        </ul>
+    </main>
+
+    
+  </body>
+</html> 

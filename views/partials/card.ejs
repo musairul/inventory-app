@@ -1,0 +1,25 @@
+<div class="card">
+  <h3 class="title"><%= title%></h3>
+  <strong class="card-list-title">Developers</strong>
+  <ul class="card-list">
+    <% developers.forEach((row)=>{%>
+    <li class="card-item"><%= row.developer%></li>
+    <%});%>
+  </ul>
+  <br />
+  <strong class="card-list-title">Genres</strong>
+  <ul class="card-list">
+    <% genres.forEach((row)=>{%>
+    <li class="card-item"><%= row.genre%></li>
+    <%});%>
+  </ul>
+  <br />
+  <div class="card-controls">
+    <form action="/editGame/<%=id%>" method="GET">
+      <button type="submit">Edit</button>
+    </form>
+    <form action="/delete-card/<%=id%>" method="POST">
+      <button type="submit">Delete</button>
+    </form>
+  </div>
+</div>
