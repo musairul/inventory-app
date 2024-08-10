@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="../styles.css" />
     <title>Inventory</title>
   </head>
   <body>
@@ -11,14 +11,14 @@
     <main>
       <h1>All Developers</h1>
       <form action="#" method="POST" class="dev-form">
-        <label for="newDev">Add New Genre</label>
-        <input type="text" id="newDev" name="newDev">
+        <label for="newDev">Add New Developer</label>
+        <input type="text" id="newDev" name="newDev" required>
         <button class="newDev-btn" type="submit">Submit</button>
       </form>
       <div class="container">
         <ul class="no-tab">
             <% developers.forEach((row)=>{%>
-                <li class="card-item list-item"><form action="/delete-developer/<%=row.id%>" method="POST"><button type="submit" class="delete-btn">Delete</button></form><a href="#"><%= row.developer%></a></li>
+                <li class="card-item list-item"><form action="/delete-developer/<%=row.id%>" method="POST"><button type="submit" class="delete-btn">Delete</button></form><a href="/developers/<%=row.id%>"><%= row.developer%></a></li>
                 <%});%>
         </ul>
     </main>

@@ -124,7 +124,7 @@ async function getGamesWithDetails(req, res) {
 async function updateGame(req, res) {
   const gameId = req.params.id;
   const { gameName, developers, genres } = req.body;
-
+  console.log(req.body);
   try {
     await queries.updateGame(gameId, gameName);
     await queries.updateLinks(
@@ -155,17 +155,49 @@ async function editCard(req, res) {
     const linkedDevelopers = await queries.getDevelopersByGameId(gameId);
     const linkedGenres = await queries.getGenresByGameId(gameId);
 
+    console.log("linkedevs", linkedDevelopers);
+
+    function containsId(list, compareTo) {
+      for (let item of list) {
+        if (item.id === compareTo) {
+          return true;
+        }
+      }
+      return false;
+    }
+
     res.render("editGame", {
       game,
       developers,
       genres,
       linkedDevelopers,
       linkedGenres,
+      containsId,
     });
   } catch (error) {
     console.error(error);
     res.status(500).send("Error loading the edit form");
   }
+}
+
+async function getDeveloperPage(req, res) {
+  const { id } = req.params;
+  const games = await queries.getGamesByDevId(id);
+  const dev = await queries.getDevById(id);
+  console.log(id);
+  console.log(games);
+  console.log(dev);
+  res.render("devGames", { developer: dev.developer, games: games });
+}
+
+async function getGenrePage(req, res) {
+  const { id } = req.params;
+  const games = await queries.getGamesByGenreId(id);
+  const genre = await queries.getGenreById(id);
+  console.log(id);
+  console.log(games);
+  console.log(genre);
+  res.render("genreGames", { genre: genre.genre, games: games });
 }
 
 module.exports = {
@@ -182,4 +214,6 @@ module.exports = {
   deleteCard,
   updateGame,
   editCard,
+  getDeveloperPage,
+  getGenrePage,
 };

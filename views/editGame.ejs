@@ -3,10 +3,48 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="../styles.css" />
     <title>Document</title>
   </head>
   <body>
-    <h1>hello world</h1>
+    <%-include("./partials/header")%>
+    <main>
+      <h1>Edit Game</h1>
+      <form action="/update-game/<%= game.id %>" method="POST">
+        <label for="gameName">Game Name:</label>
+        <input
+          type="text"
+          id="gameName"
+          name="gameName"
+          value="<%= game.title %>"
+          required
+        />
+        <h3>Developers</h3>
+        <div class="checkbox-container">
+          <% developers.forEach((row) => { %> <% console.log(row.id) %>
+          <div class="checkbox-group">
+            <input type="checkbox" id="<%= row.developer %>" name="developers"
+            value="<%= row.id %>" <%= containsId(linkedDevelopers,row.id) ?
+            'checked':''%> />
+            <label for="<%= row.developer %>"><%= row.developer %></label>
+          </div>
+          <% }) %>
+        </div>
+        <h3>Genres</h3>
+        <div class="checkbox-container">
+          <% genres.forEach((row) => { %>
+          <div class="checkbox-group">
+            <input type="checkbox" id="<%= row.genre %>" name="genres"
+            value="<%= row.id %>" <%= containsId(linkedGenres,row.id) ?
+            'checked' : '' %> />
+            <label for="<%= row.genre %>"><%= row.genre %></label>
+          </div>
+          <% }) %>
+        </div>
+        <br />
+        <br />
+        <button type="submit">Submit Game</button>
+      </form>
+    </main>
   </body>
 </html>

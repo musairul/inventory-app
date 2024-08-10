@@ -122,6 +122,92 @@ async function deleteGameAndLinks(gameId) {
   }
 }
 
+async function updateLinks(gameId, tableName, columnName, newLinks) {
+  const deleteQuery = `DELETE FROM ${tableName} WHERE game_id = $1`;
+  const insertQuery = `INSERT INTO ${tableName} (game_id, ${columnName}) VALUES ($1, $2) ON CONFLICT DO NOTHING`;
+
+  const client = await pool.connect();
+
+  try {
+    // Start a transaction
+    await client.query("BEGIN");
+
+    // Delete existing links
+    await client.query(deleteQuery, [gameId]);
+
+    // Insert new links
+    for (const linkId of newLinks) {
+      await client.query(insertQuery, [gameId, linkId]);
+    }
+
+    // Commit transaction
+    await client.query("COMMIT");
+    console.log(`Links updated for game ID ${gameId} in table ${tableName}`);
+  } catch (err) {
+    // Rollback transaction in case of error
+    await client.query("ROLLBACK");
+    console.error("Error updating links:", err);
+    throw err;
+  } finally {
+    client.release();
+  }
+}
+
+async function updateGame(gameId, gameName) {
+  const query = `UPDATE games SET title = $1 WHERE id = $2`;
+  try {
+    await pool.query(query, [gameName, gameId]);
+    console.log(`Game with ID ${gameId} updated to "${gameName}"`);
+  } catch (err) {
+    console.error("Error updating game:", err);
+    throw err;
+  }
+}
+
+async function getGamesByDevId(devId) {
+  const query = `SELECT g.title FROM games g JOIN game_developer gd ON g.id = gd.game_id WHERE gd.developer_id = $1;`;
+  try {
+    const { rows } = await pool.query(query, [devId]);
+    return rows;
+  } catch (err) {
+    console.error("Error :", err);
+    throw err;
+  }
+}
+
+async function getGamesByGenreId(genreId) {
+  const query = `SELECT g.title FROM games g JOIN game_genre gg ON g.id = gg.game_id WHERE gg.genre_id = $1;`;
+  try {
+    const { rows } = await pool.query(query, [genreId]);
+    return rows;
+  } catch (err) {
+    console.error("Error :", err);
+    throw err;
+  }
+}
+
+async function getDevById(id) {
+  const query = `SELECT developer FROM developers WHERE id = $1;`;
+  try {
+    const { rows } = await pool.query(query, [id]);
+    return rows[0];
+  } catch (err) {
+    console.err("Error:", err);
+    throw err;
+  }
+}
+
+async function getGenreById(id) {
+  const query = `SELECT genre FROM genres WHERE id = $1;`;
+  try {
+    const { rows } = await pool.query(query, [id]);
+    return rows[0];
+  } catch (err) {
+    console.err("Error:", err);
+    throw err;
+  }
+}
+
 module.exports = {
   getAll,
   insert,
@@ -133,4 +219,10 @@ module.exports = {
   insertLinks,
   deleteGameAndLinks,
   getGameById,
+  updateGame,
+  updateLinks,
+  getGamesByDevId,
+  getGamesByGenreId,
+  getDevById,
+  getGenreById,
 };

@@ -21,4 +21,7 @@ router.post("/delete-card/:id", controller.deleteCard);
 router.post("/update-game/:id", controller.updateGame);
 router.get("/editGame/:id", controller.editCard);
 
+router.get("/developers/:id", controller.getDeveloperPage);
+router.get("/genres/:id", controller.getGenrePage);
+
 module.exports = router;

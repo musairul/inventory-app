@@ -6,8 +6,8 @@ const SQL = `
     DROP TABLE games CASCADE;
     DROP TABLE developers CASCADE;
     DROP TABLE genres CASCADE;
-    DROP TABLE game_genres CASCADE;
-    DROP TABLE game_developers CASCADE;
+    DROP TABLE game_genre CASCADE;
+    DROP TABLE game_developer CASCADE;
     `;
 
 async function main() {
